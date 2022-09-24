@@ -29,7 +29,7 @@ struct Node *createNode(int key)
 };
 // func __max
 int max(int a, int b){
-    return a>b?a:b;  // if a>b return - a else return b // this is turnary operator
+    return (a>b)?a:b;  // if a>b return - a else return b // this is turnary operator
 }
 
 // This func will return balance factor of tree
@@ -47,10 +47,10 @@ struct Node* rightRotate(struct Node* y){
     struct Node* T2 = x->right;
 
     x->right = y;
-    x->left = T2;
+    y->left = T2;
 
-    y->height = max(getHeight(y->right),getHeight(y->left)) + 1;
     x->height = max(getHeight(x->right),getHeight(x->left)) + 1;
+    y->height = max(getHeight(y->right),getHeight(y->left)) + 1;
 
     return x;
 }
@@ -63,8 +63,8 @@ struct Node* leftRotate(struct Node* x){
     y->left = x;
     x->right = T2;
 
-    y->height = max(getHeight(y->right),getHeight(y->left)) + 1;
     x->height = max(getHeight(x->right),getHeight(x->left)) + 1;
+    y->height = max(getHeight(y->right),getHeight(y->left)) + 1;
 
     return y;
 }
@@ -77,7 +77,7 @@ struct Node *insert(struct Node* node, int key){
         node->left = insert(node->left, key);
     else if (key > node->key)
         node->right = insert(node->right, key);
-        return node;
+
 
     node ->height = 1+ max(getHeight(node->left),getHeight(node->right));
     int bf = getBalanceFactor(node);
@@ -97,11 +97,13 @@ struct Node *insert(struct Node* node, int key){
         return rightRotate(node);
     }
     // Right Left Case    
-    if (bf<-1 && key < node->left->key)
+    if (bf<-1 && key < node->right->key)
     {
-        node->left = rightRotate(node->right);
+        node->right = rightRotate(node->right);
         return leftRotate(node);
     }
+
+    return node;
         
 }
 
@@ -129,3 +131,5 @@ int main(){
 
     return 0;
 }
+
+/// not giving same result as tutorial need read again
